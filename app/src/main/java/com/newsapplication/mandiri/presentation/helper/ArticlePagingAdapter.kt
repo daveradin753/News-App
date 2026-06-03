@@ -9,9 +9,12 @@ import com.bumptech.glide.Glide
 import com.newsapplication.mandiri.databinding.ItemArticleBinding
 import com.newsapplication.mandiri.domain.model.ArticleModel
 
-class ArticlePagingAdapter(
-    private val onItemClick: (ArticleModel) -> Unit
-) : PagingDataAdapter<ArticleModel, ArticlePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
+class ArticlePagingAdapter : PagingDataAdapter<ArticleModel, ArticlePagingAdapter.ViewHolder>(DIFF_CALLBACK) {
+
+    private var onItemClick: (ArticleModel) -> Unit = {}
+    fun setOnItemClickListener(listener: (ArticleModel) -> Unit) {
+        onItemClick = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemArticleBinding.inflate(

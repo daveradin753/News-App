@@ -1,5 +1,6 @@
 package com.newsapplication.mandiri.presentation.helper
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,9 +9,10 @@ import com.newsapplication.mandiri.databinding.ItemCategoryBinding
 class CategoryAdapter: RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     private var categories: List<String> = emptyList()
+    @SuppressLint("NotifyDataSetChanged")
     fun setCategories(categories: List<String>) {
         this.categories = categories
-        notifyItemRangeChanged(0, categories.size)
+        notifyDataSetChanged()
     }
 
     private var onItemClick: (String) -> Unit = {}

@@ -4,4 +4,6 @@
     <string name="unknown_error">An unknown error occurred.</string>
     <string name="ok">OK</string>
     <string name="no_source_id">Source id is empty!</string>
+    <string name="search_sources_hint">Search sources...</string>
+    <string name="data_empty">Data Empty</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.newsapplication.mandiri.presentation.helper
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,9 +11,11 @@ import com.newsapplication.mandiri.util.StringUtils.capitalizeWords
 class SourcesAdapter: RecyclerView.Adapter<SourcesAdapter.ViewHolder>(){
 
     private var sources: List<SourceModel> = emptyList()
+
+    @SuppressLint("NotifyDataSetChanged")
     fun setSources(sources: List<SourceModel>) {
         this.sources = sources
-        notifyItemRangeChanged(0, sources.size)
+        notifyDataSetChanged()
     }
 
     private var onItemClick: (SourceModel) -> Unit = {}

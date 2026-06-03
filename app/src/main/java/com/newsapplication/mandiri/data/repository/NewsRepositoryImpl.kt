@@ -26,14 +26,14 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getArticlesPaging(source: String): Flow<PagingData<ArticleModel>> {
+    override fun getArticlesPaging(source: String, search: String?): Flow<PagingData<ArticleModel>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                NewsPagingSource(newsApiService, source)
+                NewsPagingSource(newsApiService, source, search)
             }
         ).flow
     }

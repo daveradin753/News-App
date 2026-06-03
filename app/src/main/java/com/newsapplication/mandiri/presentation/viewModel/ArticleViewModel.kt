@@ -20,8 +20,8 @@ class ArticleViewModel @Inject constructor(
     private var _error = Channel<String>()
     val error get() = _error.receiveAsFlow()
 
-    fun getArticles(source: String): Flow<PagingData<ArticleModel>> {
-        return newsRepository.getArticlesPaging(source)
+    fun getArticles(source: String, search: String? = null): Flow<PagingData<ArticleModel>> {
+        return newsRepository.getArticlesPaging(source, search)
             .cachedIn(viewModelScope)
     }
 

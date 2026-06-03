@@ -8,7 +8,8 @@ import com.newsapplication.mandiri.util.ApiException
 
 class NewsPagingSource(
     private val newsApiService: NewsApiService,
-    private val source: String
+    private val source: String,
+    private val search: String?
 ) : PagingSource<Int, ArticleModel>() {
 
     override fun getRefreshKey(state: PagingState<Int, ArticleModel>): Int? {
@@ -24,7 +25,8 @@ class NewsPagingSource(
             val response = newsApiService.getArticles(
                 source = source,
                 page = position,
-                pageSize = params.loadSize
+                pageSize = params.loadSize,
+                search = search
             )
             val articles = response.articles ?: emptyList()
             if (response.status == "ok") {

@@ -8,11 +8,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.newsapplication.mandiri.R
 import com.newsapplication.mandiri.databinding.ActivitySourcesBinding
 import com.newsapplication.mandiri.presentation.helper.SourcesAdapter
 import com.newsapplication.mandiri.presentation.viewModel.SourcesViewModel
@@ -28,11 +28,11 @@ class SourcesActivity : AppCompatActivity() {
     private val adapter by lazy { SourcesAdapter() }
 
     companion object {
-        fun instance(context: Context, category: String): Intent {
+        fun instance(context: Context, category: String) {
             val intent = Intent(context, SourcesActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             intent.putExtra("category", category)
-            return intent
+            context.startActivity(intent)
         }
     }
 
@@ -41,7 +41,7 @@ class SourcesActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySourcesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -56,6 +56,7 @@ class SourcesActivity : AppCompatActivity() {
         category?.let { viewModel.getSource(it) }
         binding.toolbar.apply {
             title = category?.replaceFirstChar { it.uppercase() } ?: "News Source"
+            setSupportActionBar(this)
             setNavigationOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
@@ -73,11 +74,26 @@ class SourcesActivity : AppCompatActivity() {
         adapter.setOnItemClickListener { sourceModel ->
             ArticlesActivity.instance(this@SourcesActivity, sourceModel.id)
         }
+
+        binding.etSearch.addTextChangedListener { text ->
+            val query = text.toString().lowercase()
+            val currentList = viewModel.source.value
+            currentList?.let { sources ->
+                val filteredList = if (query.isEmpty()) {
+                    sources
+                } else {
+                    sources.filter {
+                        it.name?.lowercase()?.contains(query) == true
+                    }
+                }
+                adapter.setSources(filteredList.toMutableList())
+            }
+        }
     }
 
     private fun setUpObserver() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.source.collect { list ->
                     list?.let {
                         adapter.setSources(it.toMutableList())
@@ -87,11 +103,9 @@ class SourcesActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collect {
-                    showErrorDialog(
-                        it
-                    )
+                    showErrorDialog( this@SourcesActivity, it)
                 }
             }
         }
