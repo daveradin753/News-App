@@ -27,7 +27,7 @@ android {
         }
         val newsApiKey = properties.getProperty("NEWS_API_KEY") ?: ""
 
-        buildConfigField("String", "API_KEY", "\"$newsApiKey\"")
+        buildConfigField("String", "API_KEY", "\"9581ffa4e5b641d9b06d0c8df8e4850f\"")
     }
 
     buildTypes {
