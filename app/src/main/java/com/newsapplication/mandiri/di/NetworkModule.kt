@@ -7,6 +7,7 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -45,7 +46,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideCoreChuckerInterceptor(
-        context: Context,
+        @ApplicationContext context: Context,
     ): ChuckerInterceptor {
         return ChuckerInterceptor.Builder(context)
             .collector(ChuckerCollector(context))

@@ -1,4 +1,4 @@
-package com.newsapplication.mandiri.presentation
+package com.newsapplication.mandiri.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

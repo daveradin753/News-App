@@ -49,7 +49,7 @@ android {
         buildConfigField("String", "API_KEY", "\"$newsApiKey\"")
     }
     buildFeatures {
-        compose = true
+        viewBinding = true
         buildConfig = true
     }
 }
@@ -72,6 +72,9 @@ dependencies {
 
     // Dagger Hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.material)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
