@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">News Application</string>
+    <string name="error_title">Error</string>
+    <string name="unknown_error">An unknown error occurred.</string>
+    <string name="ok">OK</string>
+    <string name="no_source_id">Source id is empty!</string>
 </resources>

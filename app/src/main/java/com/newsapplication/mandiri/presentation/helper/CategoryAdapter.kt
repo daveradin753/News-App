@@ -5,10 +5,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.newsapplication.mandiri.databinding.ItemCategoryBinding
 
-class CategoryAdapter(
-    private val categories: List<String>,
-    private val onItemClick: (String) -> Unit
-) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter: RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    private var categories: List<String> = emptyList()
+    fun setCategories(categories: List<String>) {
+        this.categories = categories
+        notifyItemRangeChanged(0, categories.size)
+    }
+
+    private var onItemClick: (String) -> Unit = {}
+    fun setOnItemClickListener(listener: (String) -> Unit) {
+        onItemClick = listener
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

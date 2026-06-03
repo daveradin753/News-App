@@ -16,6 +16,9 @@ paging = "3.3.5"
 appcompat = "1.7.1"
 constraintlayout = "2.2.1"
 material = "1.14.0"
+activity = "1.13.0"
+swiperefreshlayout = "1.1.0"
+glide = "4.16.0"
 
 
 [libraries]
@@ -54,6 +57,9 @@ chucker-noop = { module = "com.github.chuckerteam.chucker:library-no-op", versio
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

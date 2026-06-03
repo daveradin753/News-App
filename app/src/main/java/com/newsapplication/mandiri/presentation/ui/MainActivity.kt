@@ -1,23 +1,30 @@
 package com.newsapplication.mandiri.presentation.ui
 
 import android.os.Bundle
-import androidx.activity.viewModels
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.newsapplication.mandiri.R
 import com.newsapplication.mandiri.databinding.ActivityMainBinding
-import com.newsapplication.mandiri.presentation.viewModel.NewsViewModel
+import com.newsapplication.mandiri.presentation.helper.CategoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<NewsViewModel>()
     private lateinit var binding: ActivityMainBinding
+    private val adapter by lazy { CategoryAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Use ViewBinding
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -29,17 +36,14 @@ class MainActivity : AppCompatActivity() {
             "business", "entertainment", "general",
             "health", "science", "sports", "technology"
         )
-
-        // Assuming you create a standard CategoryAdapter
-//        val adapter = CategoryAdapter(categories) { selectedCategory ->
-//            // Trigger your Paging logic here
-//            // viewModel.getArticles(selectedCategory)
-//        }
-//
-//        binding.rvCategories.apply {
-//            layoutManager =
-//                LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
-//            this.adapter = adapter
-//        }
+        adapter.setCategories(categories)
+        binding.rvCategory.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            this.adapter = adapter
+        }
+        adapter.setOnItemClickListener { selectedCategory ->
+            // Trigger your Paging logic here
+            SourcesActivity.instance(this@MainActivity, selectedCategory)
+        }
     }
 }

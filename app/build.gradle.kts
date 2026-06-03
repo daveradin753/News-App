@@ -15,11 +15,19 @@ android {
     defaultConfig {
         applicationId = "com.newsapplication.mandiri"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        val properties = Properties().apply {
+            val file = project.rootProject.file("local.properties")
+            if (file.exists()) load(file.inputStream())
+        }
+        val newsApiKey = properties.getProperty("NEWS_API_KEY") ?: ""
+
+        buildConfigField("String", "API_KEY", "\"$newsApiKey\"")
     }
 
     buildTypes {
@@ -37,16 +45,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
-    }
-    defaultConfig {
-        val properties = Properties().apply {
-            val file = project.rootProject.file("local.properties")
-            if (file.exists()) load(file.inputStream())
-        }
-        val newsApiKey = properties.getProperty("NEWS_API_KEY") ?: ""
-
-        // Pass it to your code
-        buildConfigField("String", "API_KEY", "\"$newsApiKey\"")
     }
     buildFeatures {
         viewBinding = true
@@ -75,6 +73,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.swiperefreshlayout)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
@@ -85,6 +85,9 @@ dependencies {
     implementation(libs.okhttp.logging)
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.noop)
+
+    // Glide
+    implementation(libs.glide)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
