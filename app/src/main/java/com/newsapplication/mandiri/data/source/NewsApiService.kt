@@ -13,7 +13,6 @@ interface NewsApiService {
     @GET("v2/top-headlines/sources")
     suspend fun getSources(
         @Query("category") category: String,
-        @Query("apiKey") apiKey: String
     ): NewsSource.Response
 
     @GET("v2/top-headlines")
@@ -21,7 +20,6 @@ interface NewsApiService {
         @Query("sources") source: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-        @Query("apiKey") apiKey: String
     ): NewsArticle.Response
 
 }
