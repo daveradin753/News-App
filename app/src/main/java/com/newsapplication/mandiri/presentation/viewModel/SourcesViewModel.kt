@@ -2,15 +2,12 @@ package com.newsapplication.mandiri.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.newsapplication.mandiri.domain.model.ArticleModel
 import com.newsapplication.mandiri.domain.model.SourceModel
 import com.newsapplication.mandiri.domain.repository.NewsRepository
+import com.newsapplication.mandiri.util.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -31,7 +28,11 @@ class SourcesViewModel @Inject constructor(
     fun getSource(category: String) = viewModelScope.launch(Dispatchers.IO) {
         newsRepository.getSources(category)
             .catch { e ->
-                _error.send(e.message?: "Unknown error")
+                if (e is ApiException) {
+                    _error.send(e.message ?: "API Error ${e.code}")
+                } else {
+                    _error.send(e.message ?: "Unknown error")
+                }
             }
             .collect {
                 if (it.sources?.isEmpty() == true) {
