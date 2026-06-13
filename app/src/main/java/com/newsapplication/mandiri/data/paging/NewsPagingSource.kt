@@ -1,4 +1,4 @@
-package com.newsapplication.mandiri.data.repository
+package com.newsapplication.mandiri.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

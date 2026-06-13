@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.newsapplication.mandiri.data.dtos.NewsSource
+import com.newsapplication.mandiri.data.paging.NewsPagingSource
 import com.newsapplication.mandiri.data.source.NewsApiService
 import com.newsapplication.mandiri.domain.model.ArticleModel
 import com.newsapplication.mandiri.domain.repository.NewsRepository
