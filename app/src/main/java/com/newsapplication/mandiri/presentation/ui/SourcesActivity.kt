@@ -109,5 +109,13 @@ class SourcesActivity : AppCompatActivity() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loading.collect {
+                    binding.swipeRefresh.isRefreshing = it
+                }
+            }
+        }
     }
 }

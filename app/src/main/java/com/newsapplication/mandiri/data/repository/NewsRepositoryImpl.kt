@@ -9,8 +9,10 @@ import com.newsapplication.mandiri.data.source.NewsApiService
 import com.newsapplication.mandiri.domain.model.ArticleModel
 import com.newsapplication.mandiri.domain.repository.NewsRepository
 import com.newsapplication.mandiri.util.ApiException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
@@ -25,7 +27,7 @@ class NewsRepositoryImpl @Inject constructor(
             "ok" -> emit(response)
             else -> throw ApiException(response.code, response.message)
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun getArticlesPaging(source: String, search: String?): Flow<PagingData<ArticleModel>> {
         return Pager(

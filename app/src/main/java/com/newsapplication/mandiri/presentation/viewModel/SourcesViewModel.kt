@@ -6,7 +6,6 @@ import com.newsapplication.mandiri.domain.model.SourceModel
 import com.newsapplication.mandiri.domain.repository.NewsRepository
 import com.newsapplication.mandiri.util.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,9 +22,13 @@ class SourcesViewModel @Inject constructor(
     private var _error = Channel<String>()
     val error get() = _error.receiveAsFlow()
 
+    private var _loading = MutableStateFlow(false)
+    val loading get() = _loading.asStateFlow()
+
     private var _sources = MutableStateFlow<MutableList<SourceModel>?>(null)
     val source get() = _sources.asStateFlow()
-    fun getSource(category: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun getSource(category: String) = viewModelScope.launch {
+        _loading.emit(true)
         newsRepository.getSources(category)
             .catch { e ->
                 if (e is ApiException) {
@@ -33,8 +36,10 @@ class SourcesViewModel @Inject constructor(
                 } else {
                     _error.send(e.message ?: "Unknown error")
                 }
+                _loading.emit(false)
             }
             .collect {
+                _loading.emit(false)
                 if (it.sources?.isEmpty() == true) {
                     _error.send("No sources found")
                     return@collect
