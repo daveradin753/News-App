@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         }
         adapter.setCategories(categories)
         adapter.setOnItemClickListener { selectedCategory ->
-            // Trigger your Paging logic here
             SourcesActivity.instance(this@MainActivity, selectedCategory)
         }
     }
