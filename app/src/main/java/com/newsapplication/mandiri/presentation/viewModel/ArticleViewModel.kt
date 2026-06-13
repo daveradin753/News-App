@@ -5,18 +5,18 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.newsapplication.mandiri.domain.model.ArticleModel
-import com.newsapplication.mandiri.domain.repository.NewsRepository
+import com.newsapplication.mandiri.domain.usecase.GetArticlesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class ArticleViewModel @Inject constructor(
-    private val newsRepository: NewsRepository
+    private val getArticlesUseCase: GetArticlesUseCase
 ): ViewModel() {
 
     fun getArticles(source: String, search: String? = null): Flow<PagingData<ArticleModel>> {
-        return newsRepository.getArticlesPaging(source, search)
+        return getArticlesUseCase(source, search)
             .cachedIn(viewModelScope)
     }
 

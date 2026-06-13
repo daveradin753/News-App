@@ -3,7 +3,7 @@ package com.newsapplication.mandiri.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.newsapplication.mandiri.domain.model.SourceModel
-import com.newsapplication.mandiri.domain.repository.NewsRepository
+import com.newsapplication.mandiri.domain.usecase.GetSourcesUseCase
 import com.newsapplication.mandiri.util.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SourcesViewModel @Inject constructor(
-    private val newsRepository: NewsRepository
+    private val getSourcesUseCase: GetSourcesUseCase
 ) : ViewModel() {
 
     private var _error = Channel<String>()
@@ -29,7 +29,7 @@ class SourcesViewModel @Inject constructor(
     val source get() = _sources.asStateFlow()
     fun getSource(category: String) = viewModelScope.launch {
         _loading.emit(true)
-        newsRepository.getSources(category)
+        getSourcesUseCase(category)
             .catch { e ->
                 if (e is ApiException) {
                     _error.send(e.message ?: "API Error ${e.code}")
